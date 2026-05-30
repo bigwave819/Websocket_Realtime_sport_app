@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { createMatchSchema, listMatchesQuerySchema } from '../validation/matches.js'
 import { db } from '../db/db.js'
 import { matches } from '../db/schema.js'
-import { getMatchStatus } from '../utils/match-status'
+import { getMatchStatus } from '../utils/match-status.js'
 import { desc } from 'drizzle-orm'
 
 
@@ -14,7 +14,7 @@ matchRouter.get("/", (req, res) => {
     res.status(200).json({ message: "Match List" })
 })
 
-matchRouter.get('/', (req, res) => {
+matchRouter.get('/', async (req, res) => {
     const parsed = listMatchesQuerySchema.safeParse(req.query)
 
     if (!parsed.success) {
@@ -37,7 +37,7 @@ matchRouter.get('/', (req, res) => {
     }
 })
 
-matchRouter.post("/", (req, res) => {
+matchRouter.post("/", async (req, res) => {
     const parsed = createMatchSchema.safeParse(req.body)
 
     const { date : { startTime, endTime, homeScore, awayScore } } = parsed;
